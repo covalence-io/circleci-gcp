@@ -1,5 +1,5 @@
 {
-  "name": "barebones-react-typescript-express",
+  "name": "circle-ci",
   "version": "1.0.0",
   "description": "",
   "main": "dist/server.js",
