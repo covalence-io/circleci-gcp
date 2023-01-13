@@ -44,20 +44,20 @@ workflows:
   deploy:
     jobs:
       - test:
-        name: test
-        filters:
-          branches:
-            only:
-              - main
-              - dev
+          name: test
+          filters:
+            branches:
+              only:
+                - main
+                - dev
       - deploy:
-        name: deploy-staging
-        requires:
-          - test
-        post-steps:
-          - run:
-            name: Deploy app
-            command: gcloud app deploy app.yaml
-        filters:
-          branches:
-            only: dev
+          name: deploy-staging
+          requires:
+            - test
+          post-steps:
+            - run:
+              name: Deploy app
+              command: gcloud app deploy app.yaml
+          filters:
+            branches:
+              only: dev
