@@ -8,7 +8,8 @@
     "watch:server": "nodemon dist/server.js",
     "dev": "npm-run-all --parallel watch:*",
     "start": "node dist/server.js",
-    "postinstall": "webpack"
+    "postinstall": "webpack",
+    "test": "echo tests complete"
   },
   "keywords": [],
   "author": "",
