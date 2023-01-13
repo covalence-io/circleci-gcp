@@ -3,6 +3,10 @@
   "version": "1.0.0",
   "description": "",
   "main": "dist/server.js",
+  "engines": {
+    "node": "16.17.1",
+    "npm": "8.3.2"
+  },
   "scripts": {
     "watch:build": "webpack -w",
     "watch:server": "nodemon dist/server.js",
