@@ -56,8 +56,8 @@ workflows:
             - test
           post-steps:
             - run:
-              name: Deploy app
-              command: gcloud app deploy app.yaml
+                name: Deploy app
+                command: gcloud app deploy app.yaml
           filters:
             branches:
               only: dev
