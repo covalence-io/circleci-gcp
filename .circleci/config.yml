@@ -90,8 +90,6 @@ workflows:
       - promote:
           name: deploy-prod
           context: "Covalence CircleCI"
-          requires:
-            - test
           post-steps:
             - run:
                 name: Migrate traffic
