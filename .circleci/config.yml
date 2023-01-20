@@ -23,6 +23,16 @@ jobs:
             echo $GCLOUD_SERVICE_KEY | base64 --decode | gcloud auth activate-service-account --key-file=-
               gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
               gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
+  promote:
+    docker:
+      - image: google/cloud-sdk
+    steps:
+      - run:
+          name: Set up GCloud
+          command: |
+            echo $GCLOUD_SERVICE_KEY | base64 --decode | gcloud auth activate-service-account --key-file=-
+              gcloud --quiet config set project ${GOOGLE_PROJECT_ID}
+              gcloud --quiet config set compute/zone ${GOOGLE_COMPUTE_ZONE}
 
   test:
     executor:
@@ -61,3 +71,30 @@ workflows:
           filters:
             branches:
               only: dev
+      - deploy:
+          name: deploy-prod
+          context: "Covalence CircleCI"
+          requires:
+            - test
+          post-steps:
+            - run:
+                name: Deploy app
+                command: gcloud app deploy app.yaml --no-promote
+          filters:
+            branches:
+              only: main
+      - approve-prod:
+          type: approval
+          requires:
+            - deploy-prod
+      - promote:
+          context: "Covalence CircleCI"
+          post-steps:
+            - run:
+                name: Migrate traffic
+                command: gcloud app services set-traffic ${GCLOUD_APP_SERVICE} --splits=$(gcloud app versions list --sort-by="~last_deployed_time" --limit=1 --format="value(id)")=1
+            - run:
+                name: Stop previous version
+                command: gcloud app versions stop --service=${GCLOUD_APP_SERVICE} $(gcloud app versions list --filter="traffic_split=0" --sort-by="~last_deployed_time" --limit=1 --format="value(id)")
+          requires:
+            - approve-prod
