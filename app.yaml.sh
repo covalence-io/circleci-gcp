@@ -14,6 +14,4 @@ automatic_scaling:
   cpu_utilization:
     target_utilization: 0.6
   target_concurrent_requests: 100
-env_variables:
-  NODE_ENV: $NODE_ENV
 """
